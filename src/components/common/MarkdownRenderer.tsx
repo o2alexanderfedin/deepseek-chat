@@ -199,6 +199,7 @@ export const MarkdownRenderer: React.FC<MarkdownRendererProps> = ({ content }) =
                       component="code"
                       sx={{
                         backgroundColor: 'grey.100',
+                        color: 'text.primary',
                         px: 0.5,
                         py: 0.25,
                         borderRadius: 0.5,
@@ -234,6 +235,7 @@ export const MarkdownRenderer: React.FC<MarkdownRendererProps> = ({ content }) =
                   component="pre"
                   sx={{
                     backgroundColor: 'grey.100',
+                    color: 'text.primary',
                     p: 1.5,
                     borderRadius: 1,
                     overflow: 'auto',
