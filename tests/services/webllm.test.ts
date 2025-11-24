@@ -19,6 +19,7 @@ describe('WebLLMService', () => {
     };
     resetChat: ReturnType<typeof vi.fn>;
     interruptGenerate: ReturnType<typeof vi.fn>;
+    unload: ReturnType<typeof vi.fn>;
   };
 
   beforeEach(() => {
@@ -31,6 +32,7 @@ describe('WebLLMService', () => {
       },
       resetChat: vi.fn(),
       interruptGenerate: vi.fn(),
+      unload: vi.fn(),
     };
     (CreateMLCEngine as ReturnType<typeof vi.fn>).mockResolvedValue(mockEngine);
     service = WebLLMService.getInstance();
@@ -80,10 +82,12 @@ describe('WebLLMService', () => {
       });
     });
 
-    it('should not reinitialize if already ready', async () => {
+    it('should reinitialize when called again (for model switching)', async () => {
       await service.initialize();
       await service.initialize();
-      expect(CreateMLCEngine).toHaveBeenCalledTimes(1);
+      // Engine should be unloaded and recreated when initialize is called again
+      expect(mockEngine.unload).toHaveBeenCalledTimes(1);
+      expect(CreateMLCEngine).toHaveBeenCalledTimes(2);
     });
 
     it('should throw error if WebGPU is not supported', async () => {
@@ -122,7 +126,7 @@ describe('WebLLMService', () => {
       const result = await service.chat(messages);
       expect(mockEngine.chat.completions.create).toHaveBeenCalledWith({
         messages,
-        temperature: 0.7,
+        temperature: 0,
         max_tokens: undefined,
         stream: false,
       });
@@ -183,7 +187,7 @@ describe('WebLLMService', () => {
       }
       expect(mockEngine.chat.completions.create).toHaveBeenCalledWith({
         messages,
-        temperature: 0.7,
+        temperature: 0,
         max_tokens: undefined,
         stream: true,
       });

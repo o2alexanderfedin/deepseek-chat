@@ -14,12 +14,14 @@ interface ChatSidebarProps {
   onNewChat: () => void;
   onSelectConversation: (id: string) => void;
   onDeleteConversation: (id: string) => void;
+  onRenameConversation: (id: string, newTitle: string) => void;
 }
 
 export const ChatSidebar: React.FC<ChatSidebarProps> = ({
   onNewChat,
   onSelectConversation,
   onDeleteConversation,
+  onRenameConversation,
 }) => {
   const conversations = useAppSelector((state) => state.chat.conversations);
   const activeConversationId = useAppSelector((state) => state.chat.activeConversationId);
@@ -67,6 +69,7 @@ export const ChatSidebar: React.FC<ChatSidebarProps> = ({
                 isActive={conversation.id === activeConversationId}
                 onSelect={onSelectConversation}
                 onDelete={onDeleteConversation}
+                onRename={onRenameConversation}
               />
             ))}
           </List>

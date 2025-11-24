@@ -8,6 +8,14 @@ import type {
 import { WebLLMError, WebLLMErrorType } from './types';
 
 /**
+ * Available DeepSeek models
+ */
+export const AVAILABLE_MODELS = [
+  { id: 'DeepSeek-R1-Distill-Qwen-7B-q4f16_1-MLC', name: 'DeepSeek Qwen 7B', vram: '~5GB' },
+  { id: 'DeepSeek-R1-Distill-Llama-8B-q4f16_1-MLC', name: 'DeepSeek Llama 8B', vram: '~5GB' },
+] as const;
+
+/**
  * Default model ID for DeepSeek
  */
 const DEFAULT_MODEL_ID = 'DeepSeek-R1-Distill-Qwen-7B-q4f16_1-MLC';
@@ -15,7 +23,7 @@ const DEFAULT_MODEL_ID = 'DeepSeek-R1-Distill-Qwen-7B-q4f16_1-MLC';
 /**
  * Default temperature for chat completions
  */
-const DEFAULT_TEMPERATURE = 0.7;
+const DEFAULT_TEMPERATURE = 0;
 
 /**
  * WebLLM service for managing DeepSeek model lifecycle.
@@ -50,18 +58,24 @@ export class WebLLMService {
 
   /**
    * Initialize the WebLLM engine with the DeepSeek model.
+   * @param modelId - Optional model ID (defaults to 1.5B)
    * @param onProgress - Optional callback for progress updates
    * @throws {WebLLMError} If initialization fails
    */
-  public async initialize(onProgress?: ProgressCallback): Promise<void> {
+  public async initialize(modelId?: string, onProgress?: ProgressCallback): Promise<void> {
+    const targetModel = modelId || DEFAULT_MODEL_ID;
+
+    // If switching models, reset first
     if (this.ready && this.engine) {
-      return;
+      await this.engine.unload();
+      this.ready = false;
+      this.engine = null;
     }
 
     this.initStartTime = Date.now();
 
     try {
-      this.engine = await CreateMLCEngine(DEFAULT_MODEL_ID, {
+      this.engine = await CreateMLCEngine(targetModel, {
         initProgressCallback: (progress: { text: string; progress: number }) => {
           if (onProgress) {
             const webllmProgress: WebLLMProgress = {

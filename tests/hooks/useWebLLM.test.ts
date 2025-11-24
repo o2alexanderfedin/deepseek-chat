@@ -87,7 +87,7 @@ describe('useWebLLM', () => {
   it('should update load progress during initialization', async () => {
     const store = createTestStore();
 
-    mockInstance.initialize.mockImplementation(async (onProgress) => {
+    mockInstance.initialize.mockImplementation(async (_model, onProgress) => {
       if (onProgress) {
         onProgress({ progress: 50, stage: 'Loading model...' });
       }

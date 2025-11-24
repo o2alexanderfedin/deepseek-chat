@@ -1,4 +1,4 @@
-export { WebLLMService } from './WebLLMService';
+export { WebLLMService, AVAILABLE_MODELS } from './WebLLMService';
 export type {
   ChatMessage,
   ChatCompletionOptions,

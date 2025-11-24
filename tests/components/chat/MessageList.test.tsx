@@ -46,6 +46,85 @@ describe('MessageList', () => {
     expect(screen.getByText('Bold text')).toBeInTheDocument();
   });
 
+  it('renders markdown with bold formatting', () => {
+    const messagesWithMarkdown: ChatMessage[] = [
+      { id: '1', role: 'assistant', content: 'This is **bold** text', timestamp: 1700000000000 },
+    ];
+    renderWithProviders(<MessageList messages={messagesWithMarkdown} />);
+    const boldElement = screen.getByText('bold');
+    expect(boldElement.tagName).toBe('STRONG');
+  });
+
+  it('renders markdown with italic formatting', () => {
+    const messagesWithMarkdown: ChatMessage[] = [
+      { id: '1', role: 'assistant', content: 'This is *italic* text', timestamp: 1700000000000 },
+    ];
+    renderWithProviders(<MessageList messages={messagesWithMarkdown} />);
+    const italicElement = screen.getByText('italic');
+    expect(italicElement.tagName).toBe('EM');
+  });
+
+  it('renders code blocks properly', () => {
+    const messagesWithCode: ChatMessage[] = [
+      { id: '1', role: 'assistant', content: '```javascript\nconst x = 1;\n```', timestamp: 1700000000000 },
+    ];
+    renderWithProviders(<MessageList messages={messagesWithCode} />);
+    expect(screen.getByText('const x = 1;')).toBeInTheDocument();
+  });
+
+  it('renders inline code properly', () => {
+    const messagesWithCode: ChatMessage[] = [
+      { id: '1', role: 'assistant', content: 'Use `console.log()` for debugging', timestamp: 1700000000000 },
+    ];
+    renderWithProviders(<MessageList messages={messagesWithCode} />);
+    const codeElement = screen.getByText('console.log()');
+    expect(codeElement.tagName).toBe('CODE');
+  });
+
+  it('renders think blocks with distinct styling', () => {
+    const messagesWithThink: ChatMessage[] = [
+      {
+        id: '1',
+        role: 'assistant',
+        content: '<think>\nLet me analyze this problem...\n</think>\n\nHere is my answer.',
+        timestamp: 1700000000000
+      },
+    ];
+    renderWithProviders(<MessageList messages={messagesWithThink} />);
+    expect(screen.getByTestId('think-block')).toBeInTheDocument();
+    expect(screen.getByText(/Let me analyze this problem/)).toBeInTheDocument();
+    expect(screen.getByText('Here is my answer.')).toBeInTheDocument();
+  });
+
+  it('renders multiple think blocks correctly', () => {
+    const messagesWithMultipleThink: ChatMessage[] = [
+      {
+        id: '1',
+        role: 'assistant',
+        content: '<think>First thought</think>\nResponse 1\n<think>Second thought</think>\nResponse 2',
+        timestamp: 1700000000000
+      },
+    ];
+    renderWithProviders(<MessageList messages={messagesWithMultipleThink} />);
+    const thinkBlocks = screen.getAllByTestId('think-block');
+    expect(thinkBlocks).toHaveLength(2);
+  });
+
+  it('renders markdown lists correctly', () => {
+    const messagesWithList: ChatMessage[] = [
+      {
+        id: '1',
+        role: 'assistant',
+        content: '- Item 1\n- Item 2\n- Item 3',
+        timestamp: 1700000000000
+      },
+    ];
+    renderWithProviders(<MessageList messages={messagesWithList} />);
+    expect(screen.getByText('Item 1')).toBeInTheDocument();
+    expect(screen.getByText('Item 2')).toBeInTheDocument();
+    expect(screen.getByText('Item 3')).toBeInTheDocument();
+  });
+
   it('has proper accessibility attributes', () => {
     renderWithProviders(<MessageList messages={mockMessages} />);
     const list = screen.getByRole('log');

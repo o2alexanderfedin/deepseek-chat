@@ -41,6 +41,7 @@ describe('ChatSidebar', () => {
   const mockOnNewChat = vi.fn();
   const mockOnSelectConversation = vi.fn();
   const mockOnDeleteConversation = vi.fn();
+  const mockOnRenameConversation = vi.fn();
 
   beforeEach(() => {
     vi.clearAllMocks();
@@ -53,6 +54,7 @@ describe('ChatSidebar', () => {
           onNewChat={mockOnNewChat}
           onSelectConversation={mockOnSelectConversation}
           onDeleteConversation={mockOnDeleteConversation}
+          onRenameConversation={mockOnRenameConversation}
         />
       );
 
@@ -83,6 +85,7 @@ describe('ChatSidebar', () => {
           onNewChat={mockOnNewChat}
           onSelectConversation={mockOnSelectConversation}
           onDeleteConversation={mockOnDeleteConversation}
+          onRenameConversation={mockOnRenameConversation}
         />,
         store
       );
@@ -108,6 +111,7 @@ describe('ChatSidebar', () => {
           onNewChat={mockOnNewChat}
           onSelectConversation={mockOnSelectConversation}
           onDeleteConversation={mockOnDeleteConversation}
+          onRenameConversation={mockOnRenameConversation}
         />,
         store
       );
@@ -124,6 +128,7 @@ describe('ChatSidebar', () => {
           onNewChat={mockOnNewChat}
           onSelectConversation={mockOnSelectConversation}
           onDeleteConversation={mockOnDeleteConversation}
+          onRenameConversation={mockOnRenameConversation}
         />
       );
 
@@ -148,6 +153,7 @@ describe('ChatSidebar', () => {
           onNewChat={mockOnNewChat}
           onSelectConversation={mockOnSelectConversation}
           onDeleteConversation={mockOnDeleteConversation}
+          onRenameConversation={mockOnRenameConversation}
         />,
         store
       );
@@ -173,6 +179,7 @@ describe('ChatSidebar', () => {
           onNewChat={mockOnNewChat}
           onSelectConversation={mockOnSelectConversation}
           onDeleteConversation={mockOnDeleteConversation}
+          onRenameConversation={mockOnRenameConversation}
         />,
         store
       );
@@ -190,6 +197,7 @@ describe('ChatSidebar', () => {
           onNewChat={mockOnNewChat}
           onSelectConversation={mockOnSelectConversation}
           onDeleteConversation={mockOnDeleteConversation}
+          onRenameConversation={mockOnRenameConversation}
         />
       );
 

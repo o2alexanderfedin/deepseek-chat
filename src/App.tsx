@@ -14,6 +14,7 @@ import {
   deleteConversation,
   setActiveConversation,
   loadConversations,
+  updateConversationTitle,
 } from './store/slices/chatSlice';
 import { storageService } from './services/storage';
 import type { Conversation } from './types/chat';
@@ -95,6 +96,20 @@ function ChatApp() {
     }
   }, [dispatch, conversations, handleNewChat]);
 
+  const handleRenameConversation = useCallback(async (id: string, newTitle: string) => {
+    dispatch(updateConversationTitle({ id, title: newTitle }));
+
+    // Persist to storage
+    const conversation = conversations.find(c => c.id === id);
+    if (conversation) {
+      await storageService.saveConversation({
+        ...conversation,
+        title: newTitle,
+        updatedAt: Date.now(),
+      });
+    }
+  }, [dispatch, conversations]);
+
   const handleClear = async () => {
     await clear();
   };
@@ -113,6 +128,7 @@ function ChatApp() {
         onNewChat={handleNewChat}
         onSelectConversation={handleSelectConversation}
         onDeleteConversation={handleDeleteConversation}
+        onRenameConversation={handleRenameConversation}
       />
       <Box sx={{ flexGrow: 1, overflow: 'hidden' }}>
         <ChatContainer
