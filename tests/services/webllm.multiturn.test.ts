@@ -261,7 +261,7 @@ describe('WebLLMService - Multi-turn Conversations', () => {
         () => new Promise((resolve) => setTimeout(resolve, 1000))
       );
 
-      const chatPromise = service.chat([{ role: 'user', content: 'Test' }]);
+      service.chat([{ role: 'user', content: 'Test' }]);
       service.abort();
 
       // Wait a bit and try again

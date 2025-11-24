@@ -7,8 +7,9 @@ import chatReducer, { initialState } from '../../../src/store/slices/chatSlice';
 import { MessageList } from '../../../src/components/chat/MessageList';
 import type { ChatMessage } from '../../../src/types/chat';
 
-// Mock ClipboardItem
-global.ClipboardItem = vi.fn().mockImplementation((items) => items);
+// Mock ClipboardItem with supports method
+global.ClipboardItem = vi.fn().mockImplementation((items) => items) as unknown as typeof ClipboardItem;
+(global.ClipboardItem as unknown as { supports: (type: string) => boolean }).supports = () => true;
 
 // We'll mock clipboard in beforeEach to avoid conflicts with userEvent
 let mockWriteText: ReturnType<typeof vi.fn>;
