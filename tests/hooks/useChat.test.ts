@@ -4,13 +4,26 @@ import { configureStore } from '@reduxjs/toolkit';
 import React from 'react';
 import { vi, describe, it, expect, beforeEach, Mock } from 'vitest';
 import { useChat } from '../../src/hooks/useChat';
-import chatReducer from '../../src/store/slices/chatSlice';
+import chatReducer, { createConversation } from '../../src/store/slices/chatSlice';
 import type { WebLLMService } from '../../src/services/webllm/WebLLMService';
+import type { Conversation } from '../../src/types/chat';
 
 function createTestStore() {
-  return configureStore({
+  const store = configureStore({
     reducer: { chat: chatReducer },
   });
+
+  // Create a default conversation
+  const conversation: Conversation = {
+    id: 'test-conv-1',
+    title: 'Test Chat',
+    messages: [],
+    createdAt: Date.now(),
+    updatedAt: Date.now(),
+  };
+  store.dispatch(createConversation(conversation));
+
+  return store;
 }
 
 function createWrapper(store: ReturnType<typeof createTestStore>) {
@@ -55,11 +68,12 @@ describe('useChat', () => {
     });
 
     const state = store.getState();
-    expect(state.chat.messages).toHaveLength(2);
-    expect(state.chat.messages[0].role).toBe('user');
-    expect(state.chat.messages[0].content).toBe('Hello');
-    expect(state.chat.messages[1].role).toBe('assistant');
-    expect(state.chat.messages[1].content).toBe('Hello! How can I help you?');
+    const activeConv = state.chat.conversations.find(c => c.id === state.chat.activeConversationId);
+    expect(activeConv?.messages).toHaveLength(2);
+    expect(activeConv?.messages[0].role).toBe('user');
+    expect(activeConv?.messages[0].content).toBe('Hello');
+    expect(activeConv?.messages[1].role).toBe('assistant');
+    expect(activeConv?.messages[1].content).toBe('Hello! How can I help you?');
   });
 
   it('should set loading state while generating', async () => {
@@ -122,14 +136,18 @@ describe('useChat', () => {
       await result.current.sendMessage('Hello');
     });
 
-    expect(store.getState().chat.messages).toHaveLength(2);
+    const stateBefore = store.getState();
+    const activeConvBefore = stateBefore.chat.conversations.find(c => c.id === stateBefore.chat.activeConversationId);
+    expect(activeConvBefore?.messages).toHaveLength(2);
 
     // Clear chat
     await act(async () => {
       await result.current.clear();
     });
 
-    expect(store.getState().chat.messages).toHaveLength(0);
+    const stateAfter = store.getState();
+    const activeConvAfter = stateAfter.chat.conversations.find(c => c.id === stateAfter.chat.activeConversationId);
+    expect(activeConvAfter?.messages).toHaveLength(0);
     expect(mockService.reset).toHaveBeenCalled();
   });
 
@@ -158,7 +176,9 @@ describe('useChat', () => {
       await result.current.sendMessage('   ');
     });
 
-    expect(store.getState().chat.messages).toHaveLength(0);
+    const state = store.getState();
+    const activeConv = state.chat.conversations.find(c => c.id === state.chat.activeConversationId);
+    expect(activeConv?.messages).toHaveLength(0);
     expect(mockService.chat).not.toHaveBeenCalled();
   });
 });

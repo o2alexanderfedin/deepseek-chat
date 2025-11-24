@@ -18,7 +18,8 @@ export function renderWithProviders(
   {
     preloadedState = {
       chat: {
-        messages: [],
+        conversations: [],
+        activeConversationId: null,
         isLoading: false,
         modelStatus: 'idle',
         loadProgress: 0,

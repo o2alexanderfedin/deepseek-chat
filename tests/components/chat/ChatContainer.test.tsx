@@ -17,7 +17,8 @@ describe('ChatContainer', () => {
     renderWithProviders(<ChatContainer />, {
       preloadedState: {
         chat: {
-          messages: [],
+          conversations: [],
+          activeConversationId: null,
           isLoading: false,
           modelStatus: 'loading',
           loadProgress: 50,
@@ -33,7 +34,8 @@ describe('ChatContainer', () => {
     renderWithProviders(<ChatContainer />, {
       preloadedState: {
         chat: {
-          messages: [],
+          conversations: [],
+          activeConversationId: null,
           isLoading: false,
           modelStatus: 'ready',
           loadProgress: 100,
@@ -58,7 +60,8 @@ describe('ChatContainer', () => {
     renderWithProviders(<ChatContainer />, {
       preloadedState: {
         chat: {
-          messages: [],
+          conversations: [],
+          activeConversationId: null,
           isLoading: false,
           modelStatus: 'error',
           loadProgress: 0,

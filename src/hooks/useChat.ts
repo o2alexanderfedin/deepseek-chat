@@ -15,7 +15,10 @@ import type { ChatMessage } from '../types/chat';
  */
 export function useChat(service: WebLLMService | null) {
   const dispatch = useAppDispatch();
-  const messages = useAppSelector((state) => state.chat.messages);
+  const conversations = useAppSelector((state) => state.chat.conversations);
+  const activeConversationId = useAppSelector((state) => state.chat.activeConversationId);
+  const activeConversation = conversations.find(c => c.id === activeConversationId);
+  const messages = activeConversation?.messages || [];
 
   const sendMessage = useCallback(
     async (content: string) => {

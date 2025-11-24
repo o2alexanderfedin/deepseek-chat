@@ -5,7 +5,7 @@ import {
   setLoadProgress,
   setError,
 } from '../store/slices/chatSlice';
-import { WebLLMService } from '../services/webllm/WebLLMService';
+import { WebLLMService, AVAILABLE_MODELS } from '../services/webllm';
 import type { WebLLMProgress } from '../services/webllm/types';
 
 /**
@@ -15,31 +15,39 @@ import type { WebLLMProgress } from '../services/webllm/types';
 export function useWebLLM() {
   const dispatch = useAppDispatch();
   const [service] = useState<WebLLMService>(() => WebLLMService.getInstance());
+  const [currentModel, setCurrentModel] = useState<string>(AVAILABLE_MODELS[0].id);
+
+  const loadModel = useCallback(async (modelId: string) => {
+    dispatch(setModelStatus('loading'));
+    dispatch(setLoadProgress(0));
+
+    try {
+      await service.initialize(modelId, (progress: WebLLMProgress) => {
+        dispatch(setLoadProgress(progress.progress));
+      });
+
+      dispatch(setModelStatus('ready'));
+      dispatch(setLoadProgress(100));
+      setCurrentModel(modelId);
+    } catch (error) {
+      dispatch(setModelStatus('error'));
+      dispatch(
+        setError(
+          error instanceof Error ? error.message : 'Failed to initialize model'
+        )
+      );
+    }
+  }, [dispatch, service]);
 
   useEffect(() => {
-    const initializeModel = async () => {
-      dispatch(setModelStatus('loading'));
-      dispatch(setLoadProgress(0));
+    loadModel(currentModel);
+  }, []);
 
-      try {
-        await service.initialize((progress: WebLLMProgress) => {
-          dispatch(setLoadProgress(progress.progress));
-        });
-
-        dispatch(setModelStatus('ready'));
-        dispatch(setLoadProgress(100));
-      } catch (error) {
-        dispatch(setModelStatus('error'));
-        dispatch(
-          setError(
-            error instanceof Error ? error.message : 'Failed to initialize model'
-          )
-        );
-      }
-    };
-
-    initializeModel();
-  }, [dispatch, service]);
+  const switchModel = useCallback(async (modelId: string) => {
+    if (modelId !== currentModel) {
+      await loadModel(modelId);
+    }
+  }, [currentModel, loadModel]);
 
   const abort = useCallback(() => {
     service.abort();
@@ -53,5 +61,7 @@ export function useWebLLM() {
     service,
     abort,
     reset,
+    currentModel,
+    switchModel,
   };
 }

@@ -5,10 +5,18 @@ import React from 'react';
 import { vi, describe, it, expect, beforeEach, Mock } from 'vitest';
 import { useWebLLM } from '../../src/hooks/useWebLLM';
 import chatReducer from '../../src/store/slices/chatSlice';
-import { WebLLMService } from '../../src/services/webllm/WebLLMService';
+import { WebLLMService } from '../../src/services/webllm';
 
-// Mock WebLLMService
-vi.mock('../../src/services/webllm/WebLLMService');
+// Mock WebLLMService and AVAILABLE_MODELS
+vi.mock('../../src/services/webllm', () => ({
+  WebLLMService: {
+    getInstance: vi.fn(),
+    resetInstance: vi.fn(),
+  },
+  AVAILABLE_MODELS: [
+    { id: 'test-model', name: 'Test Model', vram: '4GB' },
+  ],
+}));
 
 function createTestStore() {
   return configureStore({

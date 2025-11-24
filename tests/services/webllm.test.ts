@@ -51,7 +51,7 @@ describe('WebLLMService', () => {
   describe('initialize', () => {
     it('should initialize the engine successfully', async () => {
       const onProgress = vi.fn();
-      await service.initialize(onProgress);
+      await service.initialize(undefined, onProgress);
       expect(CreateMLCEngine).toHaveBeenCalledWith(
         'DeepSeek-R1-Distill-Qwen-7B-q4f16_1-MLC',
         expect.objectContaining({
@@ -70,7 +70,7 @@ describe('WebLLMService', () => {
           return Promise.resolve(mockEngine);
         }
       );
-      const initPromise = service.initialize(onProgress);
+      const initPromise = service.initialize(undefined, onProgress);
       capturedCallback?.({ text: 'Loading model...', progress: 0.5 });
       await initPromise;
       expect(onProgress).toHaveBeenCalledWith({
