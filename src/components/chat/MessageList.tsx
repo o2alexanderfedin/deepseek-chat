@@ -44,9 +44,9 @@ export const MessageList: React.FC<MessageListProps> = ({ messages }) => {
     });
   };
 
-  const getMessageState = (messageId: string): MessageRenderState => {
+  const getMessageState = useCallback((messageId: string): MessageRenderState => {
     return messageStates[messageId] || { isRawMode: false, isEditing: false, editContent: '' };
-  };
+  }, [messageStates]);
 
   const handleToggleRawMode = useCallback((messageId: string) => {
     setMessageStates(prev => ({
@@ -56,7 +56,7 @@ export const MessageList: React.FC<MessageListProps> = ({ messages }) => {
         isRawMode: !getMessageState(messageId).isRawMode,
       },
     }));
-  }, [messageStates]);
+  }, [getMessageState]);
 
   const handleCopy = useCallback(async (message: ChatMessage, isRawMode: boolean) => {
     try {
@@ -92,7 +92,7 @@ export const MessageList: React.FC<MessageListProps> = ({ messages }) => {
         editContent: message.content,
       },
     }));
-  }, [messageStates]);
+  }, [getMessageState]);
 
   const handleSaveEdit = useCallback((messageId: string) => {
     const state = getMessageState(messageId);
@@ -104,7 +104,7 @@ export const MessageList: React.FC<MessageListProps> = ({ messages }) => {
         isEditing: false,
       },
     }));
-  }, [dispatch, messageStates]);
+  }, [dispatch, getMessageState]);
 
   const handleCancelEdit = useCallback((messageId: string) => {
     setMessageStates(prev => ({
@@ -115,7 +115,7 @@ export const MessageList: React.FC<MessageListProps> = ({ messages }) => {
         editContent: '',
       },
     }));
-  }, [messageStates]);
+  }, [getMessageState]);
 
   const handleEditContentChange = useCallback((messageId: string, content: string) => {
     setMessageStates(prev => ({
@@ -125,7 +125,7 @@ export const MessageList: React.FC<MessageListProps> = ({ messages }) => {
         editContent: content,
       },
     }));
-  }, [messageStates]);
+  }, [getMessageState]);
 
   if (messages.length === 0) {
     return (

@@ -1,4 +1,4 @@
-import { useCallback } from 'react';
+import { useCallback, useMemo } from 'react';
 import { useAppDispatch, useAppSelector } from '../store/hooks';
 import {
   addMessage,
@@ -17,8 +17,11 @@ export function useChat(service: WebLLMService | null) {
   const dispatch = useAppDispatch();
   const conversations = useAppSelector((state) => state.chat.conversations);
   const activeConversationId = useAppSelector((state) => state.chat.activeConversationId);
-  const activeConversation = conversations.find(c => c.id === activeConversationId);
-  const messages = activeConversation?.messages || [];
+
+  const messages = useMemo(() => {
+    const activeConversation = conversations.find(c => c.id === activeConversationId);
+    return activeConversation?.messages || [];
+  }, [conversations, activeConversationId]);
 
   const sendMessage = useCallback(
     async (content: string) => {

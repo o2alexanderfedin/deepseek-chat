@@ -41,7 +41,8 @@ export function useWebLLM() {
 
   useEffect(() => {
     loadModel(currentModel);
-  }, []);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []); // Intentionally run only on mount - currentModel and loadModel are stable
 
   const switchModel = useCallback(async (modelId: string) => {
     if (modelId !== currentModel) {

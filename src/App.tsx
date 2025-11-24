@@ -34,6 +34,17 @@ function ChatApp() {
   // Debounce timer for saving
   const saveTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
+  const handleNewChat = useCallback(() => {
+    const newConversation: Conversation = {
+      id: crypto.randomUUID(),
+      title: 'New Chat',
+      messages: [],
+      createdAt: Date.now(),
+      updatedAt: Date.now(),
+    };
+    dispatch(createConversation(newConversation));
+  }, [dispatch]);
+
   // Load conversations on mount
   useEffect(() => {
     const loadFromStorage = async () => {
@@ -46,7 +57,7 @@ function ChatApp() {
       }
     };
     loadFromStorage();
-  }, [dispatch]);
+  }, [dispatch, handleNewChat]);
 
   // Save conversations to storage with debounce
   useEffect(() => {
@@ -69,17 +80,6 @@ function ChatApp() {
       }
     };
   }, [conversations, activeConversationId]);
-
-  const handleNewChat = useCallback(() => {
-    const newConversation: Conversation = {
-      id: crypto.randomUUID(),
-      title: 'New Chat',
-      messages: [],
-      createdAt: Date.now(),
-      updatedAt: Date.now(),
-    };
-    dispatch(createConversation(newConversation));
-  }, [dispatch]);
 
   const handleSelectConversation = useCallback((id: string) => {
     dispatch(setActiveConversation(id));
