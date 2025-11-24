@@ -58,7 +58,7 @@ describe('useWebLLM - Comprehensive Tests', () => {
   };
 
   beforeEach(() => {
-    mockService = WebLLMService.getInstance() as typeof mockService;
+    mockService = WebLLMService.getInstance() as unknown as typeof mockService;
     vi.clearAllMocks();
     mockService.initialize.mockResolvedValue(undefined);
   });
@@ -129,10 +129,7 @@ describe('useWebLLM - Comprehensive Tests', () => {
     });
 
     it('should update progress during loading', async () => {
-      let progressCallback: ((progress: { progress: number }) => void) | undefined;
-
       mockService.initialize.mockImplementation(async (_modelId, onProgress) => {
-        progressCallback = onProgress;
         // Simulate progress updates
         await new Promise<void>((resolve) => {
           setTimeout(() => {
