@@ -5,8 +5,10 @@ import {
   Button,
   Typography,
   Divider,
+  IconButton,
+  Tooltip,
 } from '@mui/material';
-import { Add as AddIcon } from '@mui/icons-material';
+import { Add as AddIcon, GitHub as GitHubIcon } from '@mui/icons-material';
 import { useAppSelector } from '../../store/hooks';
 import { ConversationItem } from './ConversationItem';
 
@@ -74,6 +76,23 @@ export const ChatSidebar: React.FC<ChatSidebarProps> = ({
             ))}
           </List>
         )}
+      </Box>
+
+      <Divider />
+
+      <Box sx={{ p: 1, display: 'flex', justifyContent: 'center' }}>
+        <Tooltip title="View on GitHub">
+          <IconButton
+            component="a"
+            href="https://github.com/o2alexanderfedin/deepseek-chat"
+            target="_blank"
+            rel="noopener noreferrer"
+            size="small"
+            sx={{ color: 'text.secondary' }}
+          >
+            <GitHubIcon />
+          </IconButton>
+        </Tooltip>
       </Box>
     </Box>
   );
