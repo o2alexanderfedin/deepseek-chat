@@ -5,14 +5,14 @@ No excuses - every test must pass, every linting error must be resolved, and the
 </objective>
 
 <context>
-This is a React/TypeScript chat application at /Users/alexanderfedin/Projects/hapyy/experiments/DeepSeek/deepseek-chat
+This is a React/TypeScript chat application at ~/Projects/hapyy/experiments/DeepSeek/deepseek-chat
 
 Known issues to fix:
 1. 6 failing tests in webllm.test.ts - temperature tests expecting 0.7 but getting 0 (DEFAULT_TEMPERATURE was changed to 0)
 2. ESLint configuration issues (missing typescript-eslint package)
 3. Any other failing tests or issues
 
-Read the CLAUDE.md at /Users/alexanderfedin/Projects/hapyy/CLAUDE.md for project conventions.
+Read the CLAUDE.md at ~/Projects/hapyy/CLAUDE.md for project conventions.
 </context>
 
 <requirements>

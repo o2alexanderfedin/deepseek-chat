@@ -9,7 +9,7 @@ Critical bugs to catch with tests:
 </objective>
 
 <context>
-This is a React/TypeScript chat application at /Users/alexanderfedin/Projects/hapyy/experiments/DeepSeek/deepseek-chat
+This is a React/TypeScript chat application at ~/Projects/hapyy/experiments/DeepSeek/deepseek-chat
 
 Current test infrastructure:
 - Vitest with jsdom environment
@@ -24,7 +24,7 @@ Key components requiring coverage:
 - UI components (ChatPanel, MessageList, ConversationItem, etc.)
 - MarkdownRenderer with KaTeX/Mermaid/PlantUML
 
-Read existing tests in /Users/alexanderfedin/Projects/hapyy/experiments/DeepSeek/deepseek-chat/tests/
+Read existing tests in ~/Projects/hapyy/experiments/DeepSeek/deepseek-chat/tests/
 </context>
 
 <requirements>

@@ -5,7 +5,7 @@ This ensures code quality through protected branches, consistent workflow, and a
 </objective>
 
 <context>
-This is a React/TypeScript chat application at /Users/alexanderfedin/Projects/hapyy/experiments/DeepSeek/deepseek-chat
+This is a React/TypeScript chat application at ~/Projects/hapyy/experiments/DeepSeek/deepseek-chat
 
 GitHub repo: https://github.com/o2alexanderfedin/deepseek-chat
 Branches: main (production), develop (development)
@@ -15,7 +15,7 @@ The project uses:
 - npm for package management
 - Git flow branching model
 
-Read the CLAUDE.md at /Users/alexanderfedin/Projects/hapyy/CLAUDE.md for project conventions.
+Read the CLAUDE.md at ~/Projects/hapyy/CLAUDE.md for project conventions.
 </context>
 
 <requirements>
